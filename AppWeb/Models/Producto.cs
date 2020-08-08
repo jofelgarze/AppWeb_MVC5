@@ -18,5 +18,9 @@ namespace AppWeb.Models
 
         [Required]
         public decimal Precio { get; set; }
+
+        [Display(Name = "F. Aprobación")]
+        [Column(TypeName = "date")]
+        public DateTime? FechaAprobacion { get; set; }
     }
 }

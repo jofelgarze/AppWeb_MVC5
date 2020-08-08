@@ -178,6 +178,10 @@
     <Compile Include="Migrations\202008080054528_create_tbl_producto.Designer.cs">
       <DependentUpon>202008080054528_create_tbl_producto.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202008080151197_alter_tbl_producto_fechaAprobacion.cs" />
+    <Compile Include="Migrations\202008080151197_alter_tbl_producto_fechaAprobacion.Designer.cs">
+      <DependentUpon>202008080151197_alter_tbl_producto_fechaAprobacion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -267,6 +271,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202008080054528_create_tbl_producto.resx">
       <DependentUpon>202008080054528_create_tbl_producto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202008080151197_alter_tbl_producto_fechaAprobacion.resx">
+      <DependentUpon>202008080151197_alter_tbl_producto_fechaAprobacion.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
