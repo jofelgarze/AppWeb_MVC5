@@ -35,6 +35,22 @@ namespace AppWeb.Controllers
             return View(producto);
         }
 
+        public ActionResult DetailsAjax(int? id)
+        {
+            if (id == null)
+            {
+                var result = new JavaScriptResult();
+                result.Script = "alert('La consulta es inválida')";
+            }
+            Producto producto = db.Productos.Find(id);
+            if (producto == null)
+            {
+                var result = new JavaScriptResult();
+                result.Script = "alert('El producto no existe')";
+            }
+            return PartialView("_DetailsAjax",producto);
+        }
+
         // GET: Productos/Create
         public ActionResult Create()
         {
