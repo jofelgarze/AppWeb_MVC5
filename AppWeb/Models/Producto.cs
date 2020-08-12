@@ -17,6 +17,7 @@ namespace AppWeb.Models
         public string Nombre { get; set; }
 
         [Required]
+        [Range(minimum: 1, maximum: 9999.99)]
         public decimal Precio { get; set; }
 
         [Display(Name = "F. Aprobación")]

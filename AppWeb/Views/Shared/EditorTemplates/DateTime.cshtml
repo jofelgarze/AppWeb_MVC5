@@ -1,0 +1,6 @@
+﻿@model DateTime?
+@Html.TextBox("",
+    Model.HasValue ? Model.Value.ToString("yyyy-MM-dd") : String.Empty,
+    new { 
+        @class = "form-control", date_picker = true, autocomplete = "off"
+    })

@@ -42,11 +42,9 @@ namespace AppWeb.Controllers
         }
 
         // POST: Productos/Create
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
-        // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Nombre,Precio")] Producto producto)
+        public ActionResult Create([Bind(Include = "Id,Nombre,Precio,FechaAprobacion")] Producto producto)
         {
             if (ModelState.IsValid)
             {
@@ -58,7 +56,7 @@ namespace AppWeb.Controllers
             return View(producto);
         }
 
-        // GET: Productos/Edit/5
+        // GET: Productos/Edit/5?dato1=data&dato2=data....
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -78,7 +76,7 @@ namespace AppWeb.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Nombre,Precio")] Producto producto)
+        public ActionResult Edit([Bind(Include = "Id,Nombre,Precio,FechaAprobacion")] Producto producto)
         {
             if (ModelState.IsValid)
             {
