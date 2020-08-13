@@ -103,6 +103,39 @@ namespace AppWeb.Controllers
             return View(producto);
         }
 
+        // GET: Productos/Edit/5?dato1=data&dato2=data....
+        public ActionResult EditAjax(int? id)
+        {
+            if (id == null)
+            {
+                var result = new JavaScriptResult();
+                result.Script = "alert('La consulta es inválida')";
+            }
+            Producto producto = db.Productos.Find(id);
+            if (producto == null)
+            {
+                var result = new JavaScriptResult();
+                result.Script = "alert('El producto no existe')";
+            }
+            return PartialView("_EditAjax", producto);
+        }
+
+        // POST: Productos/Edit/5
+        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
+        // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditAjax([Bind(Include = "Id,Nombre,Precio,FechaAprobacion,CategoriaProducto")] Producto producto)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(producto).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return PartialView("_EditAjax", producto);
+        }
+
         // GET: Productos/Delete/5
         public ActionResult Delete(int? id)
         {

@@ -11,9 +11,10 @@
 </p>
 <table class="table" id="tbl-productos">
     <thead>
-        <tr><th>
-    @Html.DisplayNameFor(model => model.CategoriaProducto)
-</th>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoriaProducto)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Nombre)
             </th>
@@ -44,6 +45,17 @@
                 </td>
                 <td>
                     @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
+                    @Ajax.ActionLink("Editar Ajax", "EditAjax",
+                            new { id = item.Id },
+                            new AjaxOptions
+                            {
+                                HttpMethod = "GET",
+                                InsertionMode = InsertionMode.Replace,
+                                UpdateTargetId = "detalle-item",
+                                AllowCache = false
+                            },
+                            new { data_toggle = "modal", @data_target = "#detalle-productos" }
+                        ) |
                     @Ajax.ActionLink("Detalle", "DetailsAjax",
                             new { id = item.Id },
                             new AjaxOptions
@@ -96,6 +108,7 @@
 @section Scripts {
     <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
     <script src="~/Scripts/DataTables/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.mask.min.js"></script>
     <script>
         $(document).ready(function () {
             $('#tbl-productos').DataTable({
