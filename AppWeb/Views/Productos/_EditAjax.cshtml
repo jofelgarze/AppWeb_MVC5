@@ -1,6 +1,11 @@
 ﻿@model AppWeb.Models.Producto
 
-@using (Html.BeginForm())
+@using (Ajax.BeginForm("EditAjax", new { id = @Model.Id},
+    new AjaxOptions {
+        HttpMethod = "POST",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "detalle-item"
+    }, new { role = "form"}))
 {
     @Html.AntiForgeryToken()
 

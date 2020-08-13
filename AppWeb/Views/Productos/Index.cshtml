@@ -44,8 +44,7 @@
                     @Html.DisplayFor(modelItem => item.FechaAprobacion)
                 </td>
                 <td>
-                    @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
-                    @Ajax.ActionLink("Editar Ajax", "EditAjax",
+                    @Ajax.ActionLink("Editar", "EditAjax",
                             new { id = item.Id },
                             new AjaxOptions
                             {

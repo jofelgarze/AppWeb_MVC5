@@ -40,13 +40,15 @@ namespace AppWeb.Controllers
             if (id == null)
             {
                 var result = new JavaScriptResult();
-                result.Script = "alert('La consulta es inválida')";
+                result.Script = "$('#detalle-productos').modal('hide'); alert('La consulta es inválida');";
+                return result;
             }
             Producto producto = db.Productos.Find(id);
             if (producto == null)
             {
                 var result = new JavaScriptResult();
-                result.Script = "alert('El producto no existe')";
+                result.Script = "$('#detalle-productos').modal('hide'); alert('El producto no existe');";
+                return result;
             }
             return PartialView("_DetailsAjax",producto);
         }
@@ -109,13 +111,15 @@ namespace AppWeb.Controllers
             if (id == null)
             {
                 var result = new JavaScriptResult();
-                result.Script = "alert('La consulta es inválida')";
+                result.Script = "$('#detalle-productos').modal('hide'); alert('La consulta es inválida');";
+                return result;
             }
             Producto producto = db.Productos.Find(id);
             if (producto == null)
             {
                 var result = new JavaScriptResult();
-                result.Script = "alert('El producto no existe')";
+                result.Script = "$('#detalle-productos').modal('hide'); alert('El producto no existe');";
+                return result;
             }
             return PartialView("_EditAjax", producto);
         }
@@ -131,7 +135,10 @@ namespace AppWeb.Controllers
             {
                 db.Entry(producto).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                var result = new JavaScriptResult();
+                result.Script = "window.location='/Productos/Index'";
+                return result;
+
             }
             return PartialView("_EditAjax", producto);
         }
