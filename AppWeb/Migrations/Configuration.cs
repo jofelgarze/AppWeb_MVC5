@@ -1,5 +1,6 @@
 namespace AppWeb.Migrations
 {
+    using AppWeb.Models;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -14,10 +15,19 @@ namespace AppWeb.Migrations
 
         protected override void Seed(AppWeb.Models.ApplicationDbContext context)
         {
-            //  This method will be called after migrating to the latest version.
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data.
+            if (!context.Clientes.Any())
+            {
+                var clienteConsumidorFinal = new Cliente()
+                {
+                    Identificacion = "9999999999",
+                    NombreCompleto = "Consumidor Final",
+                    TipoIdentificacion = ETipoIdentificacion.CEDULA,
+                    Activo =  true
+                };
+                context.Clientes.AddOrUpdate(clienteConsumidorFinal);
+            }
+
         }
     }
 }
