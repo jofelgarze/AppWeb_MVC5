@@ -23,5 +23,9 @@ namespace AppWeb.Models
         [Display(Name = "F. Aprobación")]
         [Column(TypeName = "date")]
         public DateTime? FechaAprobacion { get; set; }
+
+        [Display(Name = "Categoria")]
+        [Required]
+        public ECategoriaProducto CategoriaProducto { get; set; }
     }
 }

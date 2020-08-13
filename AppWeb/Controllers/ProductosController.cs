@@ -60,7 +60,7 @@ namespace AppWeb.Controllers
         // POST: Productos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Nombre,Precio,FechaAprobacion")] Producto producto)
+        public ActionResult Create(Producto producto)
         {
             if (ModelState.IsValid)
             {
@@ -92,7 +92,7 @@ namespace AppWeb.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Nombre,Precio,FechaAprobacion")] Producto producto)
+        public ActionResult Edit([Bind(Include = "Id,Nombre,Precio,FechaAprobacion,CategoriaProducto")] Producto producto)
         {
             if (ModelState.IsValid)
             {
