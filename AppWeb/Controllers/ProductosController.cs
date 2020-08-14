@@ -10,6 +10,7 @@ using AppWeb.Models;
 
 namespace AppWeb.Controllers
 {
+    [Authorize]
     public class ProductosController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

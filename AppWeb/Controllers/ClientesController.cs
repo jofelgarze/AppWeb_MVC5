@@ -10,6 +10,7 @@ using AppWeb.Models;
 
 namespace AppWeb.Controllers
 {
+    [Authorize]
     public class ClientesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -30,22 +31,7 @@ namespace AppWeb.Controllers
 
             return Json(new { data = query.ToList() }, JsonRequestBehavior.AllowGet);
         }
-
-        // GET: Clientes/Details/5
-        public ActionResult Details(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Cliente cliente = db.Clientes.Find(id);
-            if (cliente == null)
-            {
-                return HttpNotFound();
-            }
-            return View(cliente);
-        }
-
+        
         // GET: Clientes/Create
         public ActionResult Create()
         {
@@ -70,18 +56,22 @@ namespace AppWeb.Controllers
         }
 
         // GET: Clientes/Edit/5
-        public ActionResult Edit(string id)
+        public ActionResult EditAjax(string id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var result = new JavaScriptResult();
+                result.Script = "$('#detalle-cliente').modal('hide'); alert('La cliente es inválida');";
+                return result;
             }
             Cliente cliente = db.Clientes.Find(id);
             if (cliente == null)
             {
-                return HttpNotFound();
+                var result = new JavaScriptResult();
+                result.Script = "$('#detalle-cliente').modal('hide'); alert('El cliente no existe');";
+                return result;
             }
-            return View(cliente);
+            return PartialView("_EditAjax", cliente);
         }
 
         // POST: Clientes/Edit/5
@@ -89,41 +79,17 @@ namespace AppWeb.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Identificacion,TipoIdentificacion,NombreCompleto,Activo")] Cliente cliente)
+        public ActionResult EditAjax([Bind(Include = "Identificacion,TipoIdentificacion,NombreCompleto,Activo")] Cliente cliente)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(cliente).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                var result = new JavaScriptResult();
+                result.Script = "window.location='/Clientes/Index'";
+                return result;
             }
-            return View(cliente);
-        }
-
-        // GET: Clientes/Delete/5
-        public ActionResult Delete(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Cliente cliente = db.Clientes.Find(id);
-            if (cliente == null)
-            {
-                return HttpNotFound();
-            }
-            return View(cliente);
-        }
-
-        // POST: Clientes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
-        {
-            Cliente cliente = db.Clientes.Find(id);
-            db.Clientes.Remove(cliente);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            return PartialView("_EditAjax", cliente);
         }
 
         // POST: Clientes/Delete/5

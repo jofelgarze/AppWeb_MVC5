@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<AppWeb.Models.Cliente>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Nuevo";
 }
 
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Nuevo", "Create")
 </p>
 <table class="table" id="tbl-clientes">
     <thead>
@@ -32,6 +32,15 @@
     </tbody>
 
 </table>
+
+<div id="detalle-cliente" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="detalle-item">
+            <!-- El coontenido se cargara via ajax -->
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 @Html.AntiForgeryToken()
 
 @section Styles {
@@ -67,7 +76,20 @@
                     },
                     {
                         "render": function (data, type, row) {
-                            return `<button class="btn btn-xs btn-danger btn-eliminar" data-id="${ row.Identificacion }"><i class="glyphicon glyphicon-remove" aria-hidden="true"></i></button>`;
+                            var link = '@Ajax.ActionLink(" ", "EditAjax",
+                                    new { id = -1 },
+                                    new AjaxOptions
+                                    {
+                                        HttpMethod = "GET",
+                                        InsertionMode = InsertionMode.Replace,
+                                        UpdateTargetId = "detalle-item",
+                                        AllowCache = false
+                                    },
+                                    new { data_toggle = "modal", @data_target = "#detalle-cliente", @class = "btn btn-xs btn-success glyphicon glyphicon-edit" }
+                                )';
+                            link = link.replace('-1', row.Identificacion);
+
+                            return `<button class="btn btn-xs btn-danger btn-eliminar" data-id="${row.Identificacion}"><i class="glyphicon glyphicon-remove" aria-hidden="true"></i></button> ` + link;
                         },
                         "targets": 4
                     }
@@ -99,7 +121,7 @@
                             }
                         })
                             .done(function (msg) {
-                                tabla.data().draw();
+                                tabla.ajax.reload();
                                 swal("Registro Eliminado", "La información ha sido removida del servidor.", "success");
                         });
 
