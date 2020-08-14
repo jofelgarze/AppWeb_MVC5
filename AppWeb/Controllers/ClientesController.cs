@@ -126,6 +126,25 @@ namespace AppWeb.Controllers
             return RedirectToAction("Index");
         }
 
+        // POST: Clientes/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteAjax(string id)
+        {
+            try
+            {
+                Cliente cliente = db.Clientes.Find(id);
+                db.Clientes.Remove(cliente);
+                db.SaveChanges();
+                return Json(new { data = true });
+            }
+            catch (Exception)
+            {
+                return Json(new { data = false });
+            }
+            
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

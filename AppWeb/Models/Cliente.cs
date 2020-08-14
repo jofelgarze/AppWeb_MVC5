@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -16,8 +18,9 @@ namespace AppWeb.Models
         [Column(TypeName = "varchar")]
         public string Identificacion { get; set; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         [Display(Name = "Tipo Ident.")]
-        [Required]
+        [Required]        
         public ETipoIdentificacion TipoIdentificacion { get; set; }
 
         [Display(Name = "Nombre Completo")]

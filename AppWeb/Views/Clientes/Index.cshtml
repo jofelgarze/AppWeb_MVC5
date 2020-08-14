@@ -32,7 +32,7 @@
     </tbody>
 
 </table>
-
+@Html.AntiForgeryToken()
 
 @section Styles {
     <link href="~/Content/DataTables/css/dataTables.bootstrap.min.css" rel="stylesheet" />
@@ -43,19 +43,31 @@
     <script src="~/Scripts/jquery.mask.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#tbl-clientes').DataTable({
+            let tipoIdentificacion = ["Cedula","Pasaporte", "RUC"]
+            let tabla = $('#tbl-clientes').DataTable({
                 ajax: "@Url.Action("GetClientes")",
                 columns: [
                     { "data": "TipoIdentificacion" },
-                    { "data": "Identificacion" },                    
+                    { "data": "Identificacion" },
                     { "data": "NombreCompleto" },
                     { "data": "Activo" }
                 ],
                 columnDefs: [
                     {
                         "render": function (data, type, row) {
-                            debugger;
-                            return '<button class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove" aria-hidden="true"></i></button>';
+                            return tipoIdentificacion[data];
+                        },
+                        "targets": 0
+                    },
+                    {
+                        "render": function (data, type, row) {
+                            return `<input type="checkbox" ${(data && data != "false" ? "checked" : "")} disabled>`;
+                        },
+                        "targets": 3
+                    },
+                    {
+                        "render": function (data, type, row) {
+                            return `<button class="btn btn-xs btn-danger btn-eliminar" data-id="${ row.Identificacion }"><i class="glyphicon glyphicon-remove" aria-hidden="true"></i></button>`;
                         },
                         "targets": 4
                     }
@@ -64,6 +76,35 @@
                     url: '/Scripts/es_EC.json'
                 }
             });
+
+            $(document).on('click', '.btn-eliminar', function (e) {
+                var id = $(this).data("id");
+                swal({
+                    title: "Se eliminará el registro",
+                    text: "¿Está seguro de eliminar el registro?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Si, eliminar",
+                    cancelButtonText: "No, deseo conservarlo",
+                    closeOnConfirm: false
+                },
+                    function () {
+                        $.ajax({
+                            method: "POST",
+                            url: "@Url.Action("DeleteAjax")",
+                            data: {
+                                "__RequestVerificationToken": $("input[name='__RequestVerificationToken']").val(),
+                                "id": id
+                            }
+                        })
+                            .done(function (msg) {
+                                tabla.data().draw();
+                                swal("Registro Eliminado", "La información ha sido removida del servidor.", "success");
+                        });
+
+                });
+            })
         });
     </script>
 }
