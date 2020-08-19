@@ -1,0 +1,102 @@
+﻿@model IEnumerable<AppWeb.Models.PedidosVM>
+
+@{
+    ViewBag.Title = "Nuevo";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Nuevo", "Create")
+</p>
+<table class="table" id="tbl-pedidos">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Identificacion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NombreCompleto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaPedido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Total)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+    </tbody>
+
+</table>
+
+<div id="detalle-pedido" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="detalle-item">
+            <!-- El coontenido se cargara via ajax -->
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+@section Styles {
+    <link href="~/Content/DataTables/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+}
+@section Scripts {
+    <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/DataTables/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.mask.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            let tipoIdentificacion = ["Cedula","Pasaporte", "RUC"]
+            let tabla = $('#tbl-pedidos').DataTable({
+                ajax: "@Url.Action("GetPedidos")",
+                columns: [
+                    { "data": "Id" },
+                    { "data": "Identificacion" },
+                    { "data": "NombreCompleto" },
+                    { "data": "FechaPedido" },
+                    { "data": "Total" }
+                ],
+                language: {
+                    url: '/Scripts/es_EC.json'
+                }
+            });
+
+            $(document).on('click', '.btn-eliminar', function (e) {
+                var id = $(this).data("id");
+                swal({
+                    title: "Se eliminará el registro",
+                    text: "¿Está seguro de eliminar el registro?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Si, eliminar",
+                    cancelButtonText: "No, deseo conservarlo",
+                    closeOnConfirm: false
+                },
+                    function () {
+                        $.ajax({
+                            method: "POST",
+                            url: "@Url.Action("DeleteAjax")",
+                            data: {
+                                "__RequestVerificationToken": $("input[name='__RequestVerificationToken']").val(),
+                                "id": id
+                            }
+                        })
+                            .done(function (msg) {
+                                tabla.ajax.reload();
+                                swal("Registro Eliminado", "La información ha sido removida del servidor.", "success");
+                        });
+
+                });
+            })
+        });
+    </script>
+}
