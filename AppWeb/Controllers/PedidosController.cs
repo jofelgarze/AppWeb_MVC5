@@ -60,7 +60,7 @@ namespace AppWeb.Controllers
 
         // POST: Pedidos/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(PedidoNuevoVM modelo)
         {
             try
             {
