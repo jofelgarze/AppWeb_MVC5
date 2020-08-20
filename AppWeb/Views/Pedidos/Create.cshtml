@@ -35,8 +35,7 @@
         </div>
 
         <div class="form-group">
-            @Ajax.ActionLink(" ", "CreateAjax",
-                new { id = -1 },
+            @Ajax.ActionLink(" ", "CreateAjax", null,
                 new AjaxOptions
                 {
                     HttpMethod = "GET",
@@ -49,6 +48,7 @@
             <table id="tbl-nuevo-pedido" class="table table-hover table-striped">
                 <thead>
                     <tr>
+                        <th>Producto ID</th>
                         <th>Producto</th>
                         <th>Precio</th>
                         <th>Cantidad</th>
@@ -82,12 +82,15 @@
 </div><!-- /.modal -->
 
 @section Styles {
+    <link href="~/Content/DataTables/css/dataTables.bootstrap.min.css" rel="stylesheet" />
     <link href="~/Content/css/select2.min.css" rel="stylesheet" />
     <link href="~/Content/select2-bootstrap.css" rel="stylesheet" />
 }
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/DataTables/dataTables.bootstrap.min.js"></script>
     <script src="~/Scripts/jquery.mask.min.js"></script>
     <script src="~/Scripts/select2.min.js"></script>
     <script>
@@ -123,10 +126,46 @@
                 }
             });
 
+            let tipoIdentificacion = ["Cedula","Pasaporte", "RUC"]
+            let tabla = $('#tbl-nuevo-pedido').DataTable({
+                columns: [
+                    { "data": "ProductoId" },
+                    { "data": "ProductoNombre" },
+                    { "data": "Precio" },
+                    { "data": "Cantidad" }
+                ],
+                columnDefs: [
+                     {
+                        "visible": false,
+                        "targets": 0
+                    },
+                    {
+                        "render": function (data, type, row) {
+                            return (row.Precio*1) * (row.Cantidad*1);
+                        },
+                        "targets": 4
+                    },
+                ],
+                language: {
+                    url: '/Scripts/es_EC.json'
+                }
+            });
+
+
             $('#@Html.IdFor(model => model.ClienteNombre)').on('select2:select', function (e) {
                 var data = e.params.data;
                 $("#@Html.IdFor(model => model.ClienteId)").val(data.id);
             });
+
+            $(document).on('submit', '#detalle-item form', function (e) {
+                e.preventDefault();
+                var form = $(this).serializeArray();
+                var fila = {};
+                for (var i = 0; i < form.length; i++) {
+                    fila[form[i].name] = form[i].value;
+                }
+                tabla.row.add(fila).draw(false);
+            })
         });
     </script>
 }

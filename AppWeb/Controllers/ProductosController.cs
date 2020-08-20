@@ -36,6 +36,18 @@ namespace AppWeb.Controllers
             return View(producto);
         }
 
+        public ActionResult GetProductos(string filtro)
+        {
+            var query = db.Productos.AsQueryable();
+
+            if (!string.IsNullOrEmpty(filtro))
+            {
+                query = query.Where(c => c.Id.ToString().Contains(filtro) || c.Nombre.Contains(filtro));
+            }
+
+            return Json(new { data = query.ToList() }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult DetailsAjax(int? id)
         {
             if (id == null)

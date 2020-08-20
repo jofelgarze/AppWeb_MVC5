@@ -80,23 +80,6 @@ namespace AppWeb.Controllers
             return PartialView("_CreateAjax");
         }
 
-        // POST: Pedidos/Create
-        [HttpPost]
-        public ActionResult CreateAjax(DetallePedidoVM modelo)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return PartialView("_CreateAjax");
-            }
-        }
-
-
         // GET: Pedidos/Edit/5
         public ActionResult Edit(int id)
         {
