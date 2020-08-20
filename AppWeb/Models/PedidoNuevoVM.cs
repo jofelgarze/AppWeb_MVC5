@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,6 +11,8 @@ namespace AppWeb.Models
     public class PedidoNuevoVM
     {
         [Required]
+        [JsonProperty]
+        [JsonConverter(typeof(IsoDateTimeConverter))]
         public DateTime? FechaPedido { get; set; }
 
         [Required]

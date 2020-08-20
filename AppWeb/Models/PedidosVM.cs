@@ -1,4 +1,7 @@
-﻿using System;
+﻿using AppWeb.Extension;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,6 +16,8 @@ namespace AppWeb.Models
         public string Identificacion { get; set; }
         public string NombreCompleto { get; set; }
         [Display(Name = "Fecha Pedido")]
+        [JsonProperty]
+        [JsonConverter(typeof(CustomDateTimeConverter))]
         public DateTime FechaPedido { get; set; }
         public decimal Total { get; set; }
     }

@@ -52,6 +52,7 @@
     <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
     <script src="~/Scripts/DataTables/dataTables.bootstrap.min.js"></script>
     <script src="~/Scripts/jquery.mask.min.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
     <script>
         $(document).ready(function () {
             let tipoIdentificacion = ["Cedula","Pasaporte", "RUC"]
@@ -63,6 +64,16 @@
                     { "data": "NombreCompleto" },
                     { "data": "FechaPedido" },
                     { "data": "Total" }
+                ],
+                columnDefs: [
+                    {
+                        "render": function (data, type, row) {
+                            var d = /\/Date\((\d*)\)\//.exec(data);
+                            var fecha = (d) ? new Date(+d[1]) : data;                           
+                            return moment(fecha).format('yyyy-MM-DD');
+                        },
+                        "targets": 3
+                    },
                 ],
                 language: {
                     url: '/Scripts/es_EC.json'
