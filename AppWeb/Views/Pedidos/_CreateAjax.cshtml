@@ -46,7 +46,8 @@
         </div>
     </div>
     <div class="modal-footer">
-        <input type="submit" value="Guardar" class="btn btn-default" />
+        <input type="submit" value="Agregar" name="accion_a" class="btn btn-default"/>
+        <input type="reset" value="Limpiar" name="accion" class="btn" />
         <button type="reset" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
     </div>
 </form>
@@ -90,5 +91,10 @@
         var data = e.params.data;
         $("#@Html.IdFor(model => model.ProductoNombre)").val(data.text);
         $("#@Html.IdFor(model => model.Precio)").val(data.precio);
+    });
+
+    $('[type="reset"]').click(function () {
+        $('#@Html.IdFor(model => model.ProductoId)').val('');
+        $('#@Html.IdFor(model => model.ProductoId)').trigger('change');
     });
 </script>

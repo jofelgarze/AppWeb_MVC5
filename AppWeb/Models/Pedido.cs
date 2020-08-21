@@ -9,6 +9,10 @@ namespace AppWeb.Models
 {
     public class Pedido
     {
+        public Pedido()
+        {
+            Detalles = new List<DetallePedido>();
+        }
         public int Id { get; set; }
 
         [Required]

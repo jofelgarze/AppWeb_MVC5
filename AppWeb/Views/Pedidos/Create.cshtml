@@ -6,7 +6,7 @@
 
 <h2>Pedido <small>nuevo</small></h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Create","Pedidos",FormMethod.Post, new { id = "frm-pedido"}))
 {
     @Html.AntiForgeryToken()
 
@@ -17,8 +17,8 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ClienteNombre, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.HiddenFor(model => model.ClienteId, htmlAttributes: new { @class = "control-label col-md-2" })
-                <select id="@Html.IdFor(model => model.ClienteNombre)" name="@Html.NameFor(model => model.ClienteNombre)"
+                @Html.HiddenFor(model => model.ClienteNombre, htmlAttributes: new { @class = "control-label col-md-2" })
+                <select id="@Html.IdFor(model => model.ClienteId)" name="@Html.NameFor(model => model.ClienteId)"
                         class="form-control">
                 </select>
                 @Html.ValidationMessageFor(model => model.ClienteNombre, "", new { @class = "text-danger" })
@@ -57,12 +57,32 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach (var item in Model.Detalles)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProductoId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProductoNombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Precio)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Cantidad)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Total)
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+            <div class="col-md-10">
                 <input type="submit" value="Crear" class="btn btn-default" />
             </div>
         </div>
@@ -101,7 +121,7 @@
             $(':input[date-picker]').mask('0000-00-00');
             $('.money2').mask("###0.00", { reverse: true });
 
-            $('#@Html.IdFor(model => model.ClienteNombre)').select2({
+            $('#@Html.IdFor(model => model.ClienteId)').select2({
                 placeholder: 'Elija una opcion...',
                 delay: 3000,
                 ajax: {
@@ -124,6 +144,11 @@
                         };
                     }
                 }
+            });
+
+             $('#@Html.IdFor(model => model.ClienteId)').on('select2:select', function (e) {
+                var data = e.params.data;
+                $("#@Html.IdFor(model => model.ClienteNombre)").val(data.text);
             });
 
             let tipoIdentificacion = ["Cedula","Pasaporte", "RUC"]
@@ -151,12 +176,6 @@
                 }
             });
 
-
-            $('#@Html.IdFor(model => model.ClienteNombre)').on('select2:select', function (e) {
-                var data = e.params.data;
-                $("#@Html.IdFor(model => model.ClienteId)").val(data.id);
-            });
-
             $(document).on('submit', '#detalle-item form', function (e) {
                 e.preventDefault();
                 var form = $(this).serializeArray();
@@ -164,7 +183,58 @@
                 for (var i = 0; i < form.length; i++) {
                     fila[form[i].name] = form[i].value;
                 }
+
+                if (!fila.ProductoId || !fila.ProductoNombre || (!fila.Cantidad || fila.Cantidad.length == 0) || !fila.Precio) {
+                    swal("Error en validaciones", "Debe llenar todos los campos", "error");
+                    return;
+                }
+
                 tabla.row.add(fila).draw(false);
+                $('#detalle-item [type="reset"]').click();
+            })
+
+            $(document).on('submit', '#frm-pedido', function (e) {
+                e.preventDefault();
+
+                var form = $(this).serializeArray();
+                var pedido = {};
+                for (var i = 0; i < form.length; i++) {
+                    pedido[form[i].name] = form[i].value;
+                }
+
+                var detalles = tabla.rows().data();
+                pedido.Detalles = [];
+                for (var i = 0; i < detalles.length; i++) {
+                    pedido.Detalles.push(detalles[i]);
+                }
+
+                
+                $.ajax({
+                    method: "POST",
+                    url: "@Url.Action("Create","Pedidos")",
+                    data: pedido
+                })
+                    .done(function (result) {
+                        if (result.Codigo == 200) {
+                            swal({
+                                title: "Exito",
+                                text: result.Mensaje,
+                                type: "success",
+                                confirmButtonClass: "btn-default",
+                                confirmButtonText: "Entendido",
+                                closeOnConfirm: false
+                            },
+                            function () {
+                                window.location = '@Url.Action("Index")';
+                            });
+                        } else if (result.Codigo == 400) {
+                            swal("Error en validaciones", result.Mensaje, "error");
+                        } else {
+                            swal("Error del sistema", "Favor comunicarse con el administrador.", "error");
+                        }
+                           
+                });
+
             })
         });
     </script>

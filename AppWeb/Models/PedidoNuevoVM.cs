@@ -3,6 +3,7 @@ using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -10,6 +11,11 @@ namespace AppWeb.Models
 {
     public class PedidoNuevoVM
     {
+        public PedidoNuevoVM()
+        {
+            Detalles = new List<DetallePedidoVM>();
+        }
+
         [Required]
         [JsonProperty]
         [JsonConverter(typeof(IsoDateTimeConverter))]
@@ -22,13 +28,27 @@ namespace AppWeb.Models
         public string ClienteNombre { get; set; }
 
         public List<DetallePedidoVM> Detalles { get; set; }
+        
+        [NotMapped]
+        public decimal Total
+        {
+            get
+            {
+                decimal total = 0;
+                if (Detalles != null && Detalles.Count > 0)
+                {
+                    total = Detalles.Sum(d => d.Precio * d.Cantidad);
+                }
+                return total;
+            }
+        }
     }
 
     public class DetallePedidoVM {
         public int Id { get; set; }
 
         [Required]
-        public string ProductoId { get; set; }
+        public int ProductoId { get; set; }
 
         [Required]
         public string ProductoNombre { get; set; }
@@ -37,5 +57,14 @@ namespace AppWeb.Models
 
         [Required]
         public int Cantidad { get; set; }
+
+        [NotMapped]
+        public decimal Total
+        {
+            get
+            {                
+                return Precio * Cantidad;
+            }
+        }
     }
 }

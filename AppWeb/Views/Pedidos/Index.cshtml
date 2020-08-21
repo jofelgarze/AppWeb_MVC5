@@ -74,6 +74,25 @@
                         },
                         "targets": 3
                     },
+                    {
+                        "render": function (data, type, row) {
+                            var link = '@Ajax.ActionLink(" ", "DetailsAjax",
+                                    new { id = -1 },
+                                    new AjaxOptions
+                                    {
+                                        HttpMethod = "GET",
+                                        InsertionMode = InsertionMode.Replace,
+                                        UpdateTargetId = "detalle-item",
+                                        AllowCache = false
+                                    },
+                                    new { data_toggle = "modal", @data_target = "#detalle-pedido", @class = "btn btn-xs btn-success glyphicon glyphicon-search" }
+                                )';
+                            link = link.replace('-1', row.Id);
+
+                            return link;
+                        },
+                        "targets": 4
+                    }
                 ],
                 language: {
                     url: '/Scripts/es_EC.json'

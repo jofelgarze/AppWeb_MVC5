@@ -201,6 +201,10 @@
     <Compile Include="Migrations\202008190037144_CreateTbl_Pedido_DetallePedido.Designer.cs">
       <DependentUpon>202008190037144_CreateTbl_Pedido_DetallePedido.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202008202243595_CrearSP_ConsultarCliente.cs" />
+    <Compile Include="Migrations\202008202243595_CrearSP_ConsultarCliente.Designer.cs">
+      <DependentUpon>202008202243595_CrearSP_ConsultarCliente.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Cliente.cs" />
@@ -599,6 +603,7 @@
     <Content Include="Scripts\moment.min.js.map" />
     <Content Include="Scripts\moment-with-locales.min.js.map" />
     <Content Include="Views\Pedidos\_CreateAjax.cshtml" />
+    <Content Include="Views\Pedidos\_DetailsAjax.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -634,6 +639,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202008190037144_CreateTbl_Pedido_DetallePedido.resx">
       <DependentUpon>202008190037144_CreateTbl_Pedido_DetallePedido.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202008202243595_CrearSP_ConsultarCliente.resx">
+      <DependentUpon>202008202243595_CrearSP_ConsultarCliente.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
